@@ -1,7 +1,7 @@
 #Import the required library
 from tkinter import *
 from tkinter import ttk
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk,ImageGrab
 
 
 #Create an instance of tkinter frame
@@ -20,8 +20,11 @@ image_container =canvas.create_image(0,0, anchor="nw",image=img1)
 ###########################MAIN CANVAS RELATED CODES ENDS#####################
 
 ###########################CUT IMG CANVAS RELATED CODES STARTS#####################
-canvas2= Canvas(win, width=400, height= 400,bg='red')
+canvas2= Canvas(win, width=400, height= 400)
 canvas2.pack(side = "right", fill = "both", expand = True)
+img4=PhotoImage(file="./submit.png")
+image_container2 =canvas2.create_image(0,0, anchor="nw",image=img4)
+
 ###########################CUT IMG CANVAS RELATED CODES ENDS#####################
 
 #########################IMAGE BUTTON CODE STARTS###############################
@@ -31,9 +34,52 @@ def update_image():
 
     canvas.itemconfig(image_container,image=img2)
 
+def cut_Image():
+    # finding the co-ordinates
+    global x1,y1,x2,y2
+    print(f'x1={x1},y1={y1},x2={x2},y2={y2}')
+    offsetX=20
+    offsetY=20
+    finalX1=win.winfo_rootx()+canvas.winfo_x()+offsetX+x1
+    finalY1=win.winfo_rooty()+canvas.winfo_y()+offsetY+y1
+    finalX2=finalX1+x2+offsetX
+    finalY2=finalY1+y2+offsetY
+    # temporarily saving the image in 
+    img=ImageGrab.grab().crop((finalX1,finalY1,finalX2,finalY2))
+    img.save('Temp.png')
+    global img4
+    img4=PhotoImage(file="./Temp.png")
+    # showing the temporary image in the canvas 2
+    
+def updateWithTheCutImage():
+    global img4
+    canvas2.itemconfig(image_container2,image=img4)
+    print('showing cur image')
+
+# def getter(widget):
+#     x=root.winfo_rootx()+widget.winfo_x()
+#     print(x)
+#     y=root.winfo_rooty()+widget.winfo_y()
+#     print(y)
+#     x1=x+widget.winfo_width()
+#     print(x1)
+#     y1=y+widget.winfo_height()
+#     print(y1)
+#     ImageGrab.grab().crop((x,y,x1,y1)).save("em.jpg")
+
+
 #Create a button to update the canvas image
 button= ttk.Button(win, text="Update",command=lambda:update_image())
 button.pack()
+
+#Create a button to update the canvas image
+button1= ttk.Button(win, text="Cut Image",command=lambda:cut_Image())
+button1.pack()
+
+#Create a button to update the canvas2 image
+button2= ttk.Button(win, text="Show Cut Image",command=lambda:updateWithTheCutImage())
+button2.pack()
+
 #########################IMAGE BUTTON CODE ENDS###############################
 
 # binding the mouse events
