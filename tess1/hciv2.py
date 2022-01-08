@@ -8,10 +8,11 @@ from PIL import Image, ImageTk, ImageGrab
 win = Tk()
 win.title('Data Collection Tool')
 # Set the geometry
-win.geometry("1000x1000")
+win.geometry("1500x1500")
 
 ###########################MAIN CANVAS RELATED CODES STARTS#####################
-canvas = Canvas(win, width=400, height=400, background='LightCyan3')
+canvas = Canvas(win, width=400, height=400,
+                background='LightCyan3')
 canvas.grid(columnspan=4, rowspan=4)
 canvas.pack(side="left", fill="both", expand=True)
 img1 = PhotoImage(file="./mongodb.png")
@@ -76,6 +77,8 @@ def updateWithTheCutImage():
 # Create a button to update the canvas image
 button = ttk.Button(win, text="Update", command=lambda: update_image())
 button.pack()
+# button.place(relx=2, x=-2, y=2, anchor=NE)
+
 
 # Create a button to update the canvas image
 button1 = ttk.Button(win, text="Cut Image", command=lambda: cut_Image())
@@ -132,19 +135,23 @@ def print_selection():
 
 
 var = StringVar()
-l = ttk.Label(win, background='cyan', width=20,
-              text='Choose the element intention')
+l = ttk.Label(win, background='cyan', width=23,
+              text='Choose element intention')
+l.place(x=10, y=10)
 l.pack()
 
 r1 = ttk.Radiobutton(win, text='Clickable', variable=var,
                      value='A', command=print_selection)
-r1.pack()
+r1.pack(side=LEFT, expand=True, fill=BOTH)
+
 r2 = ttk.Radiobutton(win, text='Not sure', variable=var,
                      value='B', command=print_selection)
-r2.pack()
+r2.pack(side=LEFT, expand=True, fill=BOTH)
+
 r3 = ttk.Radiobutton(win, text='Non Clickable', variable=var,
                      value='C', command=print_selection)
-r3.pack()
+r3.pack(side=TOP, expand=True, fill=BOTH)
+r3.place(relx=1, x=-2, y=2, anchor=NE)
 
 
 # binding the mouse events
